@@ -1,0 +1,61 @@
+services:
+  
+  grafana:
+    container_name: monitoring-grafana
+    image: grafana/grafana:latest
+    user: "0"
+    networks:
+      - proxy
+    volumes:
+    - /home/alex/docker/monitoring/grafana:/var/lib/grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    labels:
+      - "traefik.enable=true" # Enable Traefik on this service
+      - "traefik.http.routers.grafana.entrypoints=https" # Secure entrypoint for HTTPS
+      - "traefik.http.routers.grafana.rule=Host(`grafana.homelab.ru`)"  # Host rule for secure routing
+      - "traefik.http.routers.grafana.tls=true" # Enable TLS for secure connection
+      - "traefik.http.routers.grafana.middlewares=security-headers@file"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: monitoring-prometheus
+    restart: unless-stopped
+    user: "0"
+    volumes:
+      - /home/alex/configs/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /home/alex/docker/monitoring/prometheus/data:/prometheus
+    networks:
+      - proxy
+#    labels:
+#      - "traefik.enable=true" # Enable Traefik on this service
+#      - "traefik.http.routers.prometheus.entrypoints=https" # Secure entrypoint for HTTPS
+#      - "traefik.http.routers.prometheus.rule=Host(`prometheus.homelab.ru`)"  # Host rule for secure routing
+#      - "traefik.http.routers.prometheus.tls=true" # Enable TLS for secure connection
+#      - "traefik.http.routers.prometheus.middlewares=security-headers@file"
+#      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: monitoring-node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+#    expose:
+#      - 9100
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: proxy 
+    external: true
