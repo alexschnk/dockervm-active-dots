@@ -28,4 +28,11 @@
         - abbr: FS
           href: https://forum.samohosting.ru/
 
+    - Claude:
+        - abbr: CAI
+          href: https://claude.ai/
+
+    - ChatGPT:
+        - abbr: OAI
+          href: https://chatgpt.com/
 
