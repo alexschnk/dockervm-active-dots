@@ -57,6 +57,8 @@ access_control:
           policy: two_factor
         - domain: prometheus.homelab.ru
           policy: two_factor
+        - domain: uptime-kuma.homelab.ru
+          policy: two_factor
         - domain: traefik-dashboard.homelab.ru
           policy: two_factor
 session:
