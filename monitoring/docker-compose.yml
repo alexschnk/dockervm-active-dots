@@ -29,13 +29,15 @@ services:
       - /home/alex/docker/monitoring/prometheus/data:/prometheus
     networks:
       - proxy
-#    labels:
-#      - "traefik.enable=true" # Enable Traefik on this service
-#      - "traefik.http.routers.prometheus.entrypoints=https" # Secure entrypoint for HTTPS
-#      - "traefik.http.routers.prometheus.rule=Host(`prometheus.homelab.ru`)"  # Host rule for secure routing
-#      - "traefik.http.routers.prometheus.tls=true" # Enable TLS for secure connection
-#      - "traefik.http.routers.prometheus.middlewares=security-headers@file"
-#      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    labels:
+      - "traefik.enable=true" # Enable Traefik on this service
+      - "traefik.http.routers.prometheus.entrypoints=https" # Secure entrypoint for HTTPS
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.homelab.ru`)"  # Host rule for secure routing
+      - "traefik.http.routers.prometheus.tls=true" # Enable TLS for secure connection
+      - "traefik.http.routers.prometheus.middlewares=security-headers@file"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.routers.api.middlewares=authelia@docker"
+      - "traefik.http.routers.prometheus.middlewares=authelia@docker"
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -54,6 +56,23 @@ services:
 #      - 9100
     networks:
       - proxy
+    depends_on:
+      - prometheus
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: monitoring-cadvisor
+ #   ports:
+ #   - 8080:8080
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:ro
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - proxy
+    depends_on:
+      - prometheus
 
 networks:
   proxy:
