@@ -17,8 +17,7 @@ services:
       - "traefik.http.routers.uptime-kuma.tls=true" # Enable TLS for secure connection
       - "traefik.http.routers.uptime-kuma.middlewares=security-headers@file,authelia@docker"
       - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
-      - "traefik.http.routers.api.middlewares=authelia@docker"
-#      - "traefik.http.routers.homepage.middlewares=authelia@docker"
+
 networks:
   proxy:
     external: true

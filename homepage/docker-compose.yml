@@ -23,10 +23,8 @@ services:
       - "traefik.http.routers.homepage.entrypoints=https" # Secure entrypoint for HTTPS
       - "traefik.http.routers.homepage.rule=Host(`homepage.homelab.ru`)"  # Host rule for secure routing
       - "traefik.http.routers.homepage.tls=true" # Enable TLS for secure connection
-      - "traefik.http.routers.homepage.middlewares=security-headers@file"
+      - "traefik.http.routers.homepage.middlewares=security-headers@file,authelia@docker"
       - "traefik.http.services.homepage.loadbalancer.server.port=3000"
-      - "traefik.http.routers.api.middlewares=authelia@docker"
-      - "traefik.http.routers.homepage.middlewares=authelia@docker"
 networks:
   proxy:
     name: proxy 

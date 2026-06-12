@@ -34,10 +34,8 @@ services:
       - "traefik.http.routers.prometheus.entrypoints=https" # Secure entrypoint for HTTPS
       - "traefik.http.routers.prometheus.rule=Host(`prometheus.homelab.ru`)"  # Host rule for secure routing
       - "traefik.http.routers.prometheus.tls=true" # Enable TLS for secure connection
-      - "traefik.http.routers.prometheus.middlewares=security-headers@file"
+      - "traefik.http.routers.prometheus.middlewares=security-headers@file,authelia@docker"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
-      - "traefik.http.routers.api.middlewares=authelia@docker"
-      - "traefik.http.routers.prometheus.middlewares=authelia@docker"
 
   node-exporter:
     image: prom/node-exporter:latest
