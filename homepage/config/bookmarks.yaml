@@ -36,3 +36,6 @@
         - abbr: OAI
           href: https://chatgpt.com/
 
+    - DeepSeek:
+        - abbr: DS
+          href: https://chat.deepseek.com/
