@@ -1,0 +1,25 @@
+services:
+    radicale:
+        image: ghcr.io/kozea/radicale:stable
+        container_name: radicale
+        restart: unless-stopped
+        networks:
+         proxy:
+#        ports:
+#        - 5232:5232
+        volumes:
+          - ./config:/etc/radicale
+          - /home/alex/docker/radicale/data:/var/lib/radicale
+        security_opt:
+          - no-new-privileges
+        labels:
+          - "traefik.enable=true" # Enable Traefik on this service
+          - "traefik.http.routers.radicale.entrypoints=https" # Secure entrypoint for HTTPS
+          - "traefik.http.routers.radicale.rule=Host(`radicale.homelab.ru`)"  # Host rule for secure routing
+          - "traefik.http.routers.radicale.tls=true" # Enable TLS for secure connection
+          - "traefik.http.routers.radicale.middlewares=security-headers@file"
+          - "traefik.http.services.radicale.loadbalancer.server.port=5232"
+networks:
+  proxy:
+    name: proxy
+    external: true
