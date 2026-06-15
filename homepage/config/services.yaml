@@ -55,11 +55,6 @@
         icon: traefik.png
         href: https://traefik-dashboard.homelab.ru
         description: Обратный прокси
-        widget:
-          type: traefik
-          url: http://traefik:8080
-#          username: username # optional
-#          password: password # optional
 
     - Authelia:
         icon: authelia.png
@@ -70,7 +65,7 @@
         icon: adguard-home.png
         href: https://adguardhome.homelab.ru
         description: DNS-сервер
-
+    
     - Dockhand:
         icon: dockhand.png
         href: https://dockhand.homelab.ru
