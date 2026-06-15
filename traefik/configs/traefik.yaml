@@ -5,8 +5,10 @@ global:
 api:
   dashboard: true
   debug: true
+  insecure: true
 
 entryPoints:
+  
   http:
     address: ":80"
     http:
@@ -22,6 +24,9 @@ entryPoints:
   smb:
     address: ":445"
 
+  traefik:        
+    address: ":8080"
+    
 serversTransport:
   insecureSkipVerify: true
 
