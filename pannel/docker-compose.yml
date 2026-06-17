@@ -10,7 +10,8 @@ services:
     tty: true
     restart: unless-stopped
     ports:
-      - 39663:39663
+      - "39663:39663/tcp"
+      - "39663:39663/udp"
     networks:
       proxy:
     security_opt:
