@@ -59,6 +59,8 @@ access_control:
           policy: two_factor
         - domain: traefik-dashboard.homelab.ru
           policy: two_factor
+        - domain: dockhand.homelab.ru
+          policy: two_factor
 session:
     name: authelia_session
     # This secret can also be set using the env variables AUTHELIA_SESSION_SECRET_FILE

@@ -15,7 +15,7 @@ services:
       - "traefik.http.routers.dockhand.entrypoints=https" # Secure entrypoint for HTTPS
       - "traefik.http.routers.dockhand.rule=Host(`dockhand.homelab.ru`)"  # Host rule for secure routing
       - "traefik.http.routers.dockhand.tls=true" # Enable TLS for secure connection
-      - "traefik.http.routers.dockhand.middlewares=security-headers@file"
+      - "traefik.http.routers.dockhand.middlewares=security-headers@file,authelia@docker"
       - "traefik.http.services.dockhand.loadbalancer.server.port=3000"
 networks:
   proxy:
