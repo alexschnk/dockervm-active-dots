@@ -4,12 +4,12 @@ services:
     container_name: syncthing
     hostname: my-syncthing
     environment:
-      - PUID=3100
-      - PGID=3100
+      - PUID=1000
+      - PGID=1000
     volumes:
-      - /home/syncthing/bases:/var/syncthing/bases
-      - /home/syncthing/data:/var/syncthing/data
-      - /home/syncthing/config:/var/syncthing/config
+      - /home/alex/shares/syncthing/bases:/var/syncthing/bases
+      - /home/alex/shares/syncthing/data:/var/syncthing/data
+      - /home/alex/docker/syncthing/config:/var/syncthing/config
     ports:
 #      - 8384:8384 # Web UI
       - 21000:22000/tcp # TCP file transfers
