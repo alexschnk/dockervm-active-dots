@@ -1,0 +1,61 @@
+services:
+  
+  grimmory:
+    image: grimmory/grimmory:latest
+    container_name: grimmory
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+      - TZ=Europe/Moscow
+      - DATABASE_URL=jdbc:mariadb://grimmory-mariadb:3306/grimmory
+      - SWAGGER_ENABLED=false
+      - FORCE_DISABLE_OIDC=false
+    depends_on:
+      grimmory-mariadb:
+        condition: service_healthy
+    env_file:
+      - /home/alex/docker/grimmory/grimmory.env
+    volumes:
+      - /home/alex/docker/grimmory/data:/app/data
+      - /home/alex/docker/grimmory/books:/books
+      - /home/alex/docker/grimmory/bookdrop:/bookdrop
+      - /home/alex/shares/syncthing/data:/syncthing:ro
+    restart: unless-stopped
+    security_opt: 
+      - no-new-privileges
+    networks:
+      proxy:
+    labels: 
+      - "traefik.enable=true" 
+      - "traefik.http.routers.grimmory.entrypoints=https"
+      - "traefik.http.routers.grimmory.rule=Host(`grimmory.homelab.ru`)"  
+      - "traefik.http.routers.grimmory.tls=true" 
+      - "traefik.http.routers.grimmory.middlewares=security-headers@file"
+      - "traefik.http.services.grimmory.loadbalancer.server.port=6060"
+
+  grimmory-mariadb:
+    image: lscr.io/linuxserver/mariadb:11.4.8
+    container_name: grimmory-mariadb
+    env_file:
+      - /home/alex/docker/grimmory/db.env
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Moscow
+    volumes:
+      - /home/alex/docker/grimmory/db:/config
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mariadb-admin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    security_opt:
+      - no-new-privileges
+    networks:
+      proxy:
+
+networks:
+  proxy:
+    name: proxy 
+    external: true
