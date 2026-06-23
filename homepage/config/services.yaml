@@ -122,6 +122,7 @@
         description: Медиа-сервер
     
     - Grimmory:
+        icon: booklore.png
         href: https://grimmory.homelab.ru
         description: Книги
     
