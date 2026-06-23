@@ -7,7 +7,7 @@ services:
       - /home/alex/docker/jellyfin/configs:/config
       - /home/alex/docker/jellyfin/cache:/cache
       - /home/alex/shares/metube:/metube:ro
-      - /home/alex/shares/syncthing:/syncthing:ro
+      - /home/alex/shares/syncthing/data:/syncthing:ro
     restart: unless-stopped
     environment:
       - JELLYFIN_PublishedServerUrl=https://jellyfin.homelab.ru
