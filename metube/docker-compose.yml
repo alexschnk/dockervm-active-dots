@@ -16,7 +16,7 @@ services:
       - "traefik.http.routers.metube.entrypoints=https" # Secure entrypoint for HTTPS
       - "traefik.http.routers.metube.rule=Host(`metube.homelab.ru`)"  # Host rule for secure routing
       - "traefik.http.routers.metube.tls=true" # Enable TLS for secure connection
-      - "traefik.http.routers.metube.middlewares=security-headers@file"
+      - "traefik.http.routers.metube.middlewares=security-headers@file,authelia@docker"
       - "traefik.http.services.metube.loadbalancer.server.port=8081"
 networks:
   proxy:
