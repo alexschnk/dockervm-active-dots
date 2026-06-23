@@ -16,6 +16,10 @@
         - icon: flathub.png
           href: https://flathub.org/
 
+    - YouTube:
+        - icon: youtube.png
+          href: https://youtube.com/
+    
     - ARU:
         - icon: codeberg.png
           href: https://ventureo.codeberg.page/
