@@ -5,14 +5,14 @@ services:
     networks:
       proxy:
     environment:
-      - PUID=3003
-      - PGID=3003
+      - PUID=1000
+      - PGID=1000
       - TZ=Europe/Moscow
       - WEBUI_PORT=8080
       - TORRENTING_PORT=6881
     volumes:
-      - /home/qbittorrent/config:/config
-      - /home/qbittorrent/downloads:/downloads #optional
+      - /home/alex/docker/qbittorrent/config:/config
+      - /home/alex/shares/qbittorrent:/downloads #optional
 #    ports:
 #      - 8080:8080
 #      - 6881:6881
