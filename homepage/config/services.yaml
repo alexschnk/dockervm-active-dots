@@ -111,6 +111,11 @@
         href: https://stirling-pdf.homelab.ru
         description: PDF-редактор
 
+    - MeTube:
+        icon: metube.png
+        href: https://metube.homelab.ru
+        description: Загрузчик видео YouTube
+
     - MiRouter AX3200:
  #       icon: mi.png
         href: https://192.168.31.124/cgi-bin/luci/
