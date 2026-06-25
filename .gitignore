@@ -2,4 +2,4 @@ db.sqlite3
 notification.txt
 homepage.log
 acme.json
-
+.env
