@@ -1,0 +1,82 @@
+services:
+  
+  broker:
+    container_name: paperless-valkey
+    image: docker.io/valkey/valkey:9-alpine
+    restart: unless-stopped
+    volumes:
+      - /home/alex/docker/paperless/valkey:/data
+    networks:
+      paperless:
+    security_opt:
+      - no-new-privileges
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    container_name: paperless-ngx
+    restart: unless-stopped
+    networks:
+      paperless:
+      proxy:
+    depends_on:
+      - broker
+      - gotenberg
+      - tika
+    volumes:
+      - /home/alex/docker/paperless/ngx:/usr/src/paperless/data
+      - /home/alex/shares/paperless:/usr/src/paperless/media
+      - /home/alex/shares/syncthing:/usr/src/paperless/syncthing:ro
+      - /home/alex/docker/paperless/export:/usr/src/paperless/export
+      - /home/alex/docker/paperless/consume:/usr/src/paperless/consume
+    env_file: /home/alex/docker/paperless/.env
+    environment:
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBENGINE: sqlite
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+      USERMAP_UID: 1000
+      USERMAP_GID: 1000
+      PAPERLESS_URL: https://paperless.homelab.ru
+      PAPERLESS_TIME_ZONE: Europe/Moscow
+      PAPERLESS_ENABLE_UPDATE_CHECK: true
+
+    security_opt:
+      - no-new-privileges
+    labels:
+      - "traefik.enable=true" # Enable Traefik on this service
+      - "traefik.http.routers.paperless.entrypoints=https" # Secure entrypoint for HTTPS
+      - "traefik.http.routers.paperless.rule=Host(`paperless.homelab.ru`)"  # Host rule for secure routing
+      - "traefik.http.routers.paperless.tls=true" # Enable TLS for secure connection
+      - "traefik.http.routers.paperless.middlewares=security-headers@file"
+      - "traefik.http.services.paperless.loadbalancer.server.port=8000"
+      - "traefik.docker.network=proxy"   
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.33
+    restart: unless-stopped
+    container_name: paperless-gotengerg
+    security_opt: 
+      - no-new-privileges 
+    networks:
+      paperless:
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+  
+  tika:
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
+    container_name: paperless-tika
+    security_opt: 
+      - no-new-privileges 
+    networks:
+      paperless:
+
+networks:
+  proxy:
+    name: proxy 
+    external: true
+  paperless:
+    name: paperless
