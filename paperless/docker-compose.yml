@@ -25,7 +25,6 @@ services:
     volumes:
       - /home/alex/docker/paperless/ngx:/usr/src/paperless/data
       - /home/alex/shares/paperless:/usr/src/paperless/media
-      - /home/alex/shares/syncthing:/usr/src/paperless/syncthing:ro
       - /home/alex/docker/paperless/export:/usr/src/paperless/export
       - /home/alex/docker/paperless/consume:/usr/src/paperless/consume
     env_file: /home/alex/docker/paperless/.env
