@@ -40,7 +40,6 @@ services:
       PAPERLESS_URL: https://paperless.homelab.ru
       PAPERLESS_TIME_ZONE: Europe/Moscow
       PAPERLESS_ENABLE_UPDATE_CHECK: true
-
     security_opt:
       - no-new-privileges
     labels:
