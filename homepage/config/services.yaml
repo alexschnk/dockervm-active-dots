@@ -136,6 +136,11 @@
         href: https://paperless.homelab.ru
         description: Документы
     
+    - Cryptpad:
+        icon: cryptpad.png
+        href: https://cryptpad.homelab.ru
+        description: Безопасный онлайн офис
+    
     - MiRouter AX3200:
  #       icon: mi.png
         href: https://192.168.31.124/cgi-bin/luci/
