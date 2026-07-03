@@ -8,6 +8,7 @@ services:
     volumes:
       - ${UPLOAD_LOCATION}:/data
       - /etc/localtime:/etc/localtime:ro
+      - /home/alex/shares/syncthing/data:/external:ro
     env_file:
       - .env
     networks:
