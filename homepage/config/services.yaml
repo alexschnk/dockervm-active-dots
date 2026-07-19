@@ -141,11 +141,6 @@
         href: https://cryptpad.homelab.ru
         description: Безопасный онлайн офис
     
-    - Glances:
-        icon: glances.png
-        href: https://glances.homelab.ru
-        description: Realtime мониторинг
-    
     - MiRouter AX3200:
  #       icon: mi.png
         href: https://192.168.31.124/cgi-bin/luci/
