@@ -116,11 +116,6 @@
         href: https://metube.homelab.ru
         description: Загрузчик видео YouTube
 
-    - Jellyfin:
-        icon: jellyfin.png
-        href: https://jellyfin.homelab.ru
-        description: Медиа-сервер
-    
     - Immich:
         icon: immich.png
         href: https://immich.homelab.ru
