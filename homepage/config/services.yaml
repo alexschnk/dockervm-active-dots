@@ -121,11 +121,6 @@
         href: https://jellyfin.homelab.ru
         description: Медиа-сервер
     
-    - Grimmory:
-        icon: booklore.png
-        href: https://grimmory.homelab.ru
-        description: Книги
-    
     - Immich:
         icon: immich.png
         href: https://immich.homelab.ru
