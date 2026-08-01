@@ -25,9 +25,6 @@ entryPoints:
         writeTimeout: 600s
         idleTimeout: 600s
   
-  smb:
-    address: ":445"
-
 serversTransport:
   insecureSkipVerify: true
 
