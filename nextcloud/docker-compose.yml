@@ -43,6 +43,7 @@ services:
       - /home/alex/shares/qbittorrent:/mnt/qbittorrent
       - /home/alex/shares/metube:/mnt/metube:ro
       - /home/alex/shares/syncthing:/mnt/syncthing:ro
+      - /home/alex/shares/syncthing-bases:/mnt/syncthing-bases:ro
     environment:
       REDIS_HOST: cache
       TRUSTED_PROXIES: 172.16.0.0/12  
