@@ -1,0 +1,83 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - /home/alex/docker/nextcloud/db:/var/lib/postgresql/data
+    env_file:
+      - /home/alex/docker/nextcloud/.env
+    container_name: nextcloud-postgres
+    networks:
+      nextcloud:  
+    security_opt: 
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nextcloud"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  cache:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    volumes:
+      - /home/alex/docker/nextcloud/valkey:/data
+    container_name: nextcloud-valkey
+    networks:
+      nextcloud:  
+    security_opt: 
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  app:
+    image: lscr.io/linuxserver/nextcloud:latest
+    restart: unless-stopped
+    volumes:
+      - /home/alex/docker/nextcloud/config:/config
+      - /home/alex/shares/nextcloud:/data 
+      - /home/alex/shares/qbittorrent:/mnt/qbittorrent
+      - /home/alex/shares/metube:/mnt/metube:ro
+      - /home/alex/shares/syncthing:/mnt/syncthing:ro
+    environment:
+      REDIS_HOST: cache
+      TRUSTED_PROXIES: 172.16.0.0/12  
+      OVERWRITEPROTOCOL: https
+      OVERWRITECLIURL: https://nextcloud.homelab.ru
+      NEXTCLOUD_TRUSTED_DOMAINS: nextcloud.homelab.ru
+      PUID: 1000
+      PGID: 1000
+      TZ: Europe/Moscow
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    env_file:
+      - /home/alex/docker/nextcloud/.env
+    container_name: nextcloud
+    networks:
+      nextcloud:  
+      proxy:
+    security_opt: 
+      - no-new-privileges:true
+#    entrypoint: /cron.sh
+    labels:
+      - "traefik.docker.network=proxy"
+      - "traefik.enable=true" # Enable Traefik on this service
+      - "traefik.http.routers.nextcloud.entrypoints=https" # Secure entrypoint for HTTPS
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.homelab.ru`)"  # Host rule for secure routing
+      - "traefik.http.routers.nextcloud.tls=true" # Enable TLS for secure connection
+      - "traefik.http.routers.nextcloud.middlewares=security-headers@file"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
+      - "traefik.http.services.nextcloud.loadbalancer.server.scheme=https"
+networks:
+  proxy:
+    name: proxy
+    external: true
+  nextcloud:
+    name: nextcloud
