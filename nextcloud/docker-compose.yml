@@ -33,7 +33,27 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
+  
+  office:
+    image: collabora/code
+    container_name: nextcloud-collabora
+    restart: unless-stopped
+    networks:
+      proxy:
+    environment:
+      - domain=nextcloud\.homelab\.ru
+      - server_name=collabora.homelab.ru
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:storage.wopi.aliasgroup.host=https://nextcloud.homelab.ru
+#    security_opt:
+#      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.collabora.entrypoints=https"
+      - "traefik.http.routers.collabora.rule=Host(`collabora.homelab.ru`)"
+      - "traefik.http.routers.collabora.tls=true"
+      - "traefik.http.services.collabora.loadbalancer.server.port=9980"
+      - "traefik.http.services.collabora.loadbalancer.server.scheme=http"
+  
   app:
     image: lscr.io/linuxserver/nextcloud:latest
     restart: unless-stopped
@@ -65,7 +85,6 @@ services:
       proxy:
     security_opt: 
       - no-new-privileges:true
-#    entrypoint: /cron.sh
     labels:
       - "traefik.docker.network=proxy"
       - "traefik.enable=true" # Enable Traefik on this service
