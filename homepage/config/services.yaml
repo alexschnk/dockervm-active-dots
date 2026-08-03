@@ -126,11 +126,6 @@
         href: https://nextcloud.homelab.ru
         description: Домашнее облако
     
-    - Zerobyte:
-        icon: zerobyte.png
-        href: https://zerobyte.homelab.ru
-        description: Резервное копирование Restic
- 
     - Backrest:
         icon: backrest.png
         href: https://backrest.homelab.ru
