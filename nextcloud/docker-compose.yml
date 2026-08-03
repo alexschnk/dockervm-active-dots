@@ -41,9 +41,10 @@ services:
     networks:
       proxy:
     environment:
-      - domain=nextcloud\.homelab\.ru
-      - server_name=collabora.homelab.ru
-      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:storage.wopi.aliasgroup.host=https://nextcloud.homelab.ru
+#      - domain=nextcloud\.homelab\.ru
+#      - server_name=collabora.homelab.ru
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true 
+      - aliasgroup1=https://nextcloud\\.homelab\\.ru
 #    security_opt:
 #      - no-new-privileges:true
     labels:
@@ -91,9 +92,13 @@ services:
       - "traefik.http.routers.nextcloud.entrypoints=https" # Secure entrypoint for HTTPS
       - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.homelab.ru`)"  # Host rule for secure routing
       - "traefik.http.routers.nextcloud.tls=true" # Enable TLS for secure connection
-      - "traefik.http.routers.nextcloud.middlewares=security-headers@file"
       - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
       - "traefik.http.services.nextcloud.loadbalancer.server.scheme=https"
+      - "traefik.http.routers.nextcloud.middlewares=nc-headers"
+      - "traefik.http.middlewares.nc-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.nc-headers.headers.accesscontrolalloworiginlist=https://nextcloud.homelab.ru"
+#      - "traefik.http.middlewares.nc-headers.headers.customframeheadervalue=ALLOW-FROM https://nextcloud.homelab.ru"
+
 networks:
   proxy:
     name: proxy
