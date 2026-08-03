@@ -131,6 +131,11 @@
         href: https://zerobyte.homelab.ru
         description: Резервное копирование Restic
  
+    - Backrest:
+        icon: backrest.png
+        href: https://backrest.homelab.ru
+        description: Резервное копирование Restic
+    
     - MiRouter AX3200:
  #       icon: mi.png
         href: https://192.168.31.124/cgi-bin/luci/
