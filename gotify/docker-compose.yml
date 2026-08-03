@@ -1,6 +1,6 @@
 services:
   gotify:
-    image: gotify/server
+    image: gotify/server:2
     container_name: gotify
     restart: unless-stopped
     networks:

@@ -1,0 +1,28 @@
+services:
+  zerobyte:
+    image: ghcr.io/nicotsx/zerobyte:v0.41
+    container_name: zerobyte
+    restart: unless-stopped
+    user: "1000:1000"
+    environment:
+      - TZ=Europe/Moscow
+      - BASE_URL=https://zerobyte.homelab.ru
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/alex/docker/zerobyte/data:/var/lib/zerobyte
+      - /home/alex/shares:/mnt:ro
+    env_file:
+      - /home/alex/docker/zerobyte/.env
+    networks:
+      proxy:
+    labels:
+      - "traefik.enable=true" 
+      - "traefik.http.routers.zerobyte.entrypoints=https" 
+      - "traefik.http.routers.zerobyte.rule=Host(`zerobyte.homelab.ru`)"  
+      - "traefik.http.routers.zerobyte.tls=true" 
+      - "traefik.http.routers.zerobyte.middlewares=security-headers@file"
+      - "traefik.http.services.zerobyte.loadbalancer.server.port=4096"
+networks:
+  proxy:
+    name: proxy
+    external: true
